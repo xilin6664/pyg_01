@@ -36,7 +36,7 @@ public class SellerServiceImpl implements SellerService {
 	}
 
 	/**
-	 * 按分页查询
+	 * 按商家审核分页查询
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
