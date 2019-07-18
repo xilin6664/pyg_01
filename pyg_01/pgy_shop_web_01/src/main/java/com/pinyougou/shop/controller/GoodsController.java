@@ -2,6 +2,7 @@ package com.pinyougou.shop.controller;
 import java.util.List;
 
 import com.pinyougou.vo.Goods;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,9 @@ public class GoodsController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody Goods goods){
 		try {
+			//为商品设置商家id
+			String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+			goods.getTbGoods().setSellerId(sellerId);
 			goodsService.add(goods);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
