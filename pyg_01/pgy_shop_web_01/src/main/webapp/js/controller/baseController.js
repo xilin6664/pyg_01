@@ -51,5 +51,17 @@ app.controller("baseController",function($scope){
 		
 		return value;
 	};
+	//根据指定的key从数组[{key1:value1},{key2:value2}]中查询对象并返回
+	$scope.searchObjectByKeyFromArragy=function (jsonArr,searchValue,searcheKey) {
+		for(var i=0;i<jsonArr.length;i++){
+			if (jsonArr[i][searcheKey] == searchValue){
+				//根据key获取值
+				//使用获取的值和searchValue比对,如果比对成功,该对象就是需要的对象,直接返回
+				return jsonArr[i]
+			}
+		}
+		//循环结束未找到对象,返回null
+		return null;
+    }
 
 });

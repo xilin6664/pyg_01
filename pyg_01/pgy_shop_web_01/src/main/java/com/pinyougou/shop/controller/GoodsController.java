@@ -114,7 +114,20 @@ public class GoodsController {
 	 */
 	@RequestMapping("/search/{page}/{rows}")
 	public PageResult search(@RequestBody TbGoods goods, @PathVariable("page") int page,  @PathVariable("rows") int rows  ){
+		//为商品设置商家id
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		goods.setSellerId(sellerId);
 		return goodsService.findPage(goods, page, rows);		
 	}
-	
+	//商品上下架失败
+	@RequestMapping("/setMarketableStatus/{marketableStatus}/{selectIds}")
+	public Result setMarketableStatus( @PathVariable("marketableStatus") String marketableStatus,  @PathVariable("selectIds") Long[] selectIds  ){
+		try {
+			goodsService.setMarketableStatus(marketableStatus,selectIds);
+			return new Result(true, marketableStatus.equals("1")?"上架成功":"下架成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, marketableStatus.equals("1")?"上架失败":"下架失败");
+		}
+	}
 }
