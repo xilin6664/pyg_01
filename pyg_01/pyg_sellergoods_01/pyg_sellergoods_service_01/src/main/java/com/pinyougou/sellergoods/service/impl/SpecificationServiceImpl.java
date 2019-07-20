@@ -1,17 +1,18 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
-import com.pinyougou.pojo.TbSpecificationOption;
-import com.pinyougou.pojo.TbSpecificationOptionExample;
+import com.pinyougou.mapper.TbTypeTemplateMapper;
+import com.pinyougou.pojo.*;
 import com.pinyougou.vo.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbSpecificationMapper;
-import com.pinyougou.pojo.TbSpecification;
-import com.pinyougou.pojo.TbSpecificationExample;
 import com.pinyougou.pojo.TbSpecificationExample.Criteria;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,8 @@ public class SpecificationServiceImpl implements SpecificationService {
 	private TbSpecificationMapper specificationMapper;
 	@Autowired
 	private TbSpecificationOptionMapper tbSpecificationOptionMapper;
+	@Autowired
+	private TbTypeTemplateMapper tbTypeTemplateMapper;
 	/**
 	 * 查询全部
 	 */
@@ -137,5 +140,24 @@ public class SpecificationServiceImpl implements SpecificationService {
 		Page<TbSpecification> page= (Page<TbSpecification>)specificationMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+    @Override //根据typetemplateid查询对应的规格数据
+    public List<Map> findSpecByTypeTemplateId(Long typeTemplateId) {
+		//查询模板数据
+		TbTypeTemplate template = tbTypeTemplateMapper.selectByPrimaryKey(typeTemplateId);
+		String specIds = template.getSpecIds();//规格数据
+		//2.将规格字符串转换成List<Map>数据
+		List<Map> specList = JSON.parseArray(specIds, Map.class);
+		for (Map map : specList) {
+			//根据规格id查询对应的规格选项list
+			Object id = map.get("id");
+			TbSpecificationOptionExample example =new TbSpecificationOptionExample();
+			example.createCriteria().andSpecIdEqualTo(Long.valueOf(String.valueOf(map.get("id"))));
+			List<TbSpecificationOption> options = tbSpecificationOptionMapper.selectByExample(example);
+			//4.将查询结果放到map中：key=options
+			map.put("options", options);
+		}
+		return specList;
+    }
+
 }
