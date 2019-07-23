@@ -44,8 +44,6 @@ app.controller('goodsController' ,function($scope,$controller, itemCatService,sp
                     $scope.entity.tbGoods.typeTemplateId = '';//模板id
                     $scope.brandList = [];
                     editor.html('');
-				}else{
-					alert(response.message);
 				}
 			}
 		);
@@ -74,8 +72,8 @@ app.controller('goodsController' ,function($scope,$controller, itemCatService,sp
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-    };
-    $scope.entity = {tbGoods:{}, tbGoodsDesc:{itemImages:[],specificationItems:[]}, itemList:[{spec:{},price:100,num:9999,status:0,isDefault:0}]};
+    };                                                                                  //{customAttributeName:'',customAttributeValue:''}
+    $scope.entity = {tbGoods:{}, tbGoodsDesc:{itemImages:[],specificationItems:[],customAttributeItems:[]}, itemList:[{spec:{},price:100,num:9999,status:0,isDefault:0}]};
    // $scope.entity = {tbGoods:{}, tbGoodsDesc:{itemImages:[],specificationItems:[]}, itemList:[]};//复合类变量
     $scope.itemCat1List=[];//一级分类列表
     $scope.itemCat2List = [];//二级分类列表
@@ -107,6 +105,7 @@ watch监控函数,可以监控变量或函数的返回值变化,在变化时触�
                 $scope.itemCat3List = [];//三级分类列表
                 $scope.entity.tbGoods.typeTemplateId = '';//模板id
                 $scope.brandList = [];//保存品牌数组
+                $scope.entity.tbGoodsDesc.customAttributeItems=[];
             })
 			
 		}
@@ -120,6 +119,7 @@ watch监控函数,可以监控变量或函数的返回值变化,在变化时触�
             //清空之前的数据
             $scope.entity.tbGoods.typeTemplateId = '';//模板id
             $scope.brandList = [];//保存品牌数组
+            $scope.entity.tbGoodsDesc.customAttributeItems=[];
         })}
     });
 	//监控三级分类的变化动态查询到对应的模板id进行展示
@@ -136,9 +136,23 @@ watch监控函数,可以监控变量或函数的返回值变化,在变化时触�
 	//监控模板id的变化动态展示对应的品牌下拉列表
     $scope.$watch('entity.tbGoods.typeTemplateId',function (newValue1,oldValue) {
         if ('' != newValue1 && undefined != newValue1){//只有变化之后的值不为undefined时才发送请求查询
-        //根据newValue查询对应的模板id进行展示
+        //根据newValue查询对应的品牌列表以及扩展属性的数据进行展示
         typeTemplateService.findOne(newValue1).success(function (res) {
             $scope.brandList =JSON.parse(res.brandIds);//保存品牌数组
+            //$scope.customAttributeItemsList =JSON.parse(res.customAttributeItems);//保存扩展属性数组
+           // $scope.entity.tbGoodsDesc.customAttributeItems.customAttributeName =JSON.parse(res.customAttributeItems);//保存扩展属性数组
+            $scope.customAttributeItemsList =JSON.parse(res.customAttributeItems);//保存扩展属性数组
+            //循环构造扩展属性的数据
+            if ($scope.customAttributeItemsList.length <=0) {
+                $scope.entity.tbGoodsDesc.customAttributeItems=[]//没有扩展属性
+            }else {
+                //有扩展属性
+                var obje = {customAttributeName:'',customAttributeValue:''};
+                for (var i =0;i<$scope.customAttributeItemsList.length;i++){
+                    obje={customAttributeName:$scope.customAttributeItemsList[i].text,customAttributeValue:''};
+                    $scope.entity.tbGoodsDesc.customAttributeItems.push(obje);
+                }
+            }
         });
         //根据typetemplateid查询对应的规格数据
             specificationService.findSpecByTypeTemplateId(newValue1).success(function (res) {
