@@ -2,14 +2,11 @@ package com.pinyougou.shop.controller;
 
 import entity.Result;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import utils.FastDfsClient;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 文件上传
