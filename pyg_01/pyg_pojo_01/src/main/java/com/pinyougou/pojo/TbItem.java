@@ -1,10 +1,13 @@
 package com.pinyougou.pojo;
 
 import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.Dynamic;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class TbItem  implements Serializable {
     @Field //配置注解保存字段和solr中的映射关系
@@ -54,7 +57,18 @@ public class TbItem  implements Serializable {
     private String spec;
     @Field("item_seller")
     private String seller;
+    //添加solr动态域配置 -->必须加泛型
+    @Dynamic //动态域配置注解
+    @Field("item_spec_*")//域名配置注解
+    private Map<String,String> specMap;
 
+    public Map<String, String> getSpecMap() {
+        return specMap;
+    }
+
+    public void setSpecMap(Map<String, String> specMap) {
+        this.specMap = specMap;
+    }
 
     public Long getId() {
         return id;

@@ -41,3 +41,9 @@ app.controller('baseController', function ($scope ) {
         return arr.join(",");
     }
 });
+//创建过滤器使angularJS可以显示后台传来的HTML样式
+app.filter('trustHtml',function ($sce) {
+    return function (text) {
+        return $sce.trustAsHtml(text);
+    }
+});

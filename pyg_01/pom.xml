@@ -16,10 +16,10 @@
         <module>pgy_shop_web_01</module>
         <module>pyg_portal_web_01</module>
         <module>pyg_content_01</module>
-        <module>solr_demo</module>
         <module>pyg_dataimport</module>
         <module>pyg_search_web_01</module>
         <module>pyg_search_01</module>
+        <module>pyg_page_01</module>
     </modules>
     <packaging>pom</packaging>
 
