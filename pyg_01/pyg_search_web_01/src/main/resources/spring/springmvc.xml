@@ -30,5 +30,5 @@
     <dubbo:application name="pinyougou-search-web" />
     <dubbo:registry address="zookeeper://47.94.111.33:2181"/>
     <dubbo:annotation package="com.pinyougou.search.controller" />
-
+    <dubbo:consumer check="false"></dubbo:consumer>
 </beans>

@@ -36,6 +36,10 @@ app.service('goodsService',function($http){
     //商品批量删除  deleteGoods
     this.deleteGoods=function(selectIds){
         return $http.get('../goods/deleteGoods/'+selectIds);
+    };
+    //商品生成静态页面
+	this.staticPage=function (goodsId) {
+        return $http.get('../goods/geneItemHtml/'+goodsId);
     }
 
 });

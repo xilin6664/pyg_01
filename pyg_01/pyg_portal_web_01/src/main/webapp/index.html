@@ -21,8 +21,8 @@
 	<script src="./js/controller/baseController.js"></script>
 	<script src="./js/controller/contentController.js"></script>
 </head>
-
-<body ng-app="pyg" ng-controller="contentController" ng-init="findContentList(1)">
+<!--findContentList(1);-->
+<body ng-app="pyg" ng-controller="contentController" ng-init="findContentList(1);">
 	<!-- 头部栏位 -->
 	<!--页面顶部-->
 <div id="nav-bottom">
@@ -74,8 +74,8 @@
 							<form action="" class="sui-form form-inline">
 								<!--searchAutoComplete-->
 								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<a class="sui-btn btn-xlarge btn-danger" href="search.html">搜索</a>
+									<input type="text" id="autocomplete" type="text" ng-model="keywords" class="input-error input-xxlarge" />
+									<a class="sui-btn btn-xlarge btn-danger" ng-click="jumpToSearch();">搜索</a>
 								</div>
 							</form>
 						</div>

@@ -113,6 +113,14 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
-    
+	};
+    //生成静态模板 staticPage(goods.id);
+	$scope.staticPage=function (goodsId) {
+        goodsService.staticPage(goodsId).success(function (res) {
+            alert(res.message);//输出提示信息
+			if (res.success){
+                $scope.reloadList();//刷新列表
+			}
+        })
+    }
 });	

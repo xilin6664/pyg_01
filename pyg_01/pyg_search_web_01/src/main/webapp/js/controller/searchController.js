@@ -1,5 +1,5 @@
 //控制层
-app.controller('searchController' ,function($scope,$controller   ,searchService) {
+app.controller('searchController' ,function($scope,$controller   ,searchService,$location) {
 
     $controller('baseController', {$scope: $scope});//继承
     $scope.searchEntity = {keywords:'华为',spec:{},price:'',brand:'',category:'',sortField:'item_price',sort:'ASC',
@@ -7,6 +7,10 @@ app.controller('searchController' ,function($scope,$controller   ,searchService)
 
     $scope.searchResult = {itemList:[],categoryList:[],specList:[],brandList:[]};//保存查询结果
     $scope.initSearch=function () {
+        //判断页面传来的搜索参数值是否为空 然后进行查询
+        if($location.search().keywords !='' && $location.search().keywords != undefined){
+            $scope.searchEntity.keywords=$location.search().keywords;
+        }
         $scope.search();//调用搜索方法
     };
     //添加搜索查询条件方法 addSearchMap
@@ -113,6 +117,13 @@ app.controller('searchController' ,function($scope,$controller   ,searchService)
         //重新搜索
         $scope.search();
     };
-
-
+    $scope.jumpPageNum=1;
+    //跳转到指定页
+    $scope.jumpPage=function () {
+        if($scope.jumpPageNum >1 && $scope.jumpPageNum <= $scope.totalPages){
+            $scope.searchEntity.page=$scope.jumpPageNum;
+            //重新搜索
+            $scope.search();
+        }
+    }
 });

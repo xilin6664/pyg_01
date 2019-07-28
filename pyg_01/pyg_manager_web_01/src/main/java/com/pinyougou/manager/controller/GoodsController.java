@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.sellergoods.service.GoodsService;
 import com.pinyougou.vo.Goods;
@@ -25,6 +26,8 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+	@Reference
+	private ItemPageService itemPageService;
 	
 	/**
 	 * 返回全部列表
@@ -138,6 +141,17 @@ public class GoodsController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false, "删除失败");
+		}
+	}
+	//生成静态模板  geneItemHtml
+	@RequestMapping("/geneItemHtml/{goodsId}")
+	public Result geneItemHtml(@PathVariable("goodsId") Long goodsId){
+		try {
+			itemPageService.geneItemHtml(goodsId);
+			return new Result(true, "生成成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "生成失败");
 		}
 	}
 }

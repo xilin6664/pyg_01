@@ -31,7 +31,7 @@
 
 </head>
             <!--ng-init="findItemCatList();searchEntity={}"-->
-<body ng-app="pyg" ng-controller="goodsController" ng-init="findItemCatList();searchEntity={auditStatus:'1',isDelete:'0'}" class="hold-transition skin-red sidebar-mini" >
+<body ng-app="pyg" ng-controller="goodsController" ng-init="findItemCatList();searchEntity={auditStatus:'2',isDelete:'0'}" class="hold-transition skin-red sidebar-mini" >
   <!-- .box-body -->
                 
                     <div class="box-header with-border">
@@ -93,8 +93,8 @@
 										  {{statuses[goods.auditStatus]}}
 									  </td>
 									  <td class="text-center">
-										  <button type="button"  class="btn bg-olive btn-xs">
-											  <a href="goods_edit.html">商品详情</a></button>
+										  <button  type="button"  class="btn bg-olive btn-xs" >
+											 <a ng-click="staticPage(goods.id);"> 生成静态模板</a></button>
 									  </td>
 								  </tr>
 

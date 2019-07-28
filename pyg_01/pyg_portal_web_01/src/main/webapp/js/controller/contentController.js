@@ -103,4 +103,12 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
             $scope.contentList=res;
         })
     }
+    //点击搜索按钮时完成跳转
+    $scope.jumpToSearch = function () {
+        if($scope.keywords == undefined || $scope.keywords == ''){
+            $scope.keywords = '华为';
+
+        }
+        location.href='http://search.pinyougou.com/search.html#?keywords='+$scope.keywords;
+    }
 });	

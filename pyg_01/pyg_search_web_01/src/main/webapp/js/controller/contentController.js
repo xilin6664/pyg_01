@@ -23,12 +23,12 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 	}
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){
 		contentService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
 			}
-		);				
+		);
 	}
 	
 	//保存 
@@ -103,4 +103,5 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
             $scope.contentList=res;
         })
     }
+
 });	

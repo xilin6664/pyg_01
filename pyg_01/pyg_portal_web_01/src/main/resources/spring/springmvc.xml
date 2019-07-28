@@ -30,7 +30,7 @@
     <dubbo:application name="pyg-portal-web" />
     <dubbo:registry address="zookeeper://47.94.111.33:2181"/>
     <dubbo:annotation package="com.pinyougou.portal.controller" />
-
+    <dubbo:consumer check="false"></dubbo:consumer>
     <!-- 配置多媒体解析器 -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
