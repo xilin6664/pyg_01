@@ -109,10 +109,10 @@
                     <#list custAttrArr as custAttr>
                     <div class="summary-wrap">
                         <div class="fl title">
-                            <i>${custAttr.text}</i>
+                            <i>${custAttr.text!'无'}</i>
                         </div>
                         <div class="fl fix-width">
-                            <em class="t-gray">${custAttr.value}</em>
+                            <em class="t-gray">${custAttr.value!'无'}</em>
                         </div>
                     </div>
                     </#list>
@@ -128,7 +128,7 @@
                                 </div>
                             </dt>
                             <#list specItem.attributeValue as optionName>
-                            <dd><a href="javascript:;" class="{{isSelected('${specItem.attributeName}', '${optionName}')?'selected':''}}"
+                            <dd><a href="javascript: class="{{isSelected('${specItem.attributeName}', '${optionName}')?'selected':''}}"
                                    ng-click="selectAndJump('${specItem.attributeName}','${optionName}')">${optionName}<span title="点击取消选择">&nbsp;</span>
                             </a></dd>
                             </#list>

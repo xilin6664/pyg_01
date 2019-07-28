@@ -123,4 +123,10 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 			}
         })
     }
+    //全部生成静态页面
+	$scope.goodsHtmlAll=function () {
+        goodsService.goodsHtmlAll().success(function (res) {
+            alert(res.message);
+        })
+    }
 });	

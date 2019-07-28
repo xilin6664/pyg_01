@@ -41,5 +41,9 @@ app.service('goodsService',function($http){
 	this.staticPage=function (goodsId) {
         return $http.get('../goods/geneItemHtml/'+goodsId);
     }
+    //全部商品生成静态页面
+    this.goodsHtmlAll=function () {
+        return $http.get('../goods/goodsHtmlAll');
+    }
 
 });

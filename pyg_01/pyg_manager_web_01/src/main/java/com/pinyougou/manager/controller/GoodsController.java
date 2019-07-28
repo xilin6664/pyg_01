@@ -154,4 +154,15 @@ public class GoodsController {
 			return new Result(false, "生成失败");
 		}
 	}
+	//全部生成静态模板
+	@RequestMapping("/goodsHtmlAll")
+	public Result goodsHtmlAll(){
+		try {
+			itemPageService.goodsHtmlAll();
+			return new Result(true, "全部生成成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "全部生成失败");
+		}
+	}
 }

@@ -9,6 +9,7 @@ import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +46,15 @@ public class ItemPageServiceImpl implements ItemPageService {
 
     @Override
     public void geneItemHtml(Long goodsId) throws Exception {
-    //准备模板文件
-    //创建configuration变量
-    //设置参数:版本/模板目录/默认编码格式
+        staticPageByGoodsId(goodsId);
+
+
+    }
+//根据goodsid生成静态页面
+    private void staticPageByGoodsId(Long goodsId) throws Exception {
+        //准备模板文件
+        //创建configuration变量
+        //设置参数:版本/模板目录/默认编码格式
         Configuration configuration = freeMarkerConfigurer.getConfiguration();
         //根据模板名称获取模板变量
         Template template = configuration.getTemplate(PAGE_TEMPLATE_NAME);
@@ -78,6 +86,17 @@ public class ItemPageServiceImpl implements ItemPageService {
             out.close();
         }
         //将生成模板之后的商品状态修改成以生成模板的状态
+    }
 
+    @Override//全部生成静态模板
+    public void goodsHtmlAll() throws Exception {
+        //查询出所有的符合条件的商品数据
+        TbGoodsExample example = new TbGoodsExample();
+        //未删除状态且审核通过
+        example.createCriteria().andIsDeleteEqualTo("0").andAuditStatusEqualTo("2");
+        List<TbGoods> goodsList = goodsMapper.selectByExample(example);
+        for (TbGoods tbGoods : goodsList) {
+            staticPageByGoodsId(tbGoods.getId());//调用方法逐一生成静态页面
+        }
     }
 }
