@@ -119,7 +119,7 @@ public class GoodsController {
 		goods.setSellerId(sellerId);
 		return goodsService.findPage(goods, page, rows);		
 	}
-	//商品上下架失败
+	//商品上下架
 	@RequestMapping("/setMarketableStatus/{marketableStatus}/{selectIds}")
 	public Result setMarketableStatus( @PathVariable("marketableStatus") String marketableStatus,  @PathVariable("selectIds") Long[] selectIds  ){
 		try {

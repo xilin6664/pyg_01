@@ -7,15 +7,22 @@ import com.alibaba.fastjson.JSON;
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.*;
 import com.pinyougou.vo.Goods;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
 
 import entity.PageResult;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 /**
  * 服务实现层
@@ -221,13 +228,38 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 	}
 
-    @Override//商品上下架管理
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	@Autowired
+	private ActiveMQTopic updateTopic;
+	@Autowired
+	private ActiveMQTopic deleteTopic;
+    @Override//商品上下架管理 ,并利用消息中间件完成商品页面静态化的生成和删除和solr索引库的生成和删除
     public void setMarketableStatus(String marketableStatus, Long[] selectIds) {
 		for (Long selectId : selectIds) {
 			TbGoods tbGoods = new TbGoods();
 			tbGoods.setId(selectId);
 			tbGoods.setIsMarketable(marketableStatus);//更新上下架状态
 			goodsMapper.updateByPrimaryKeySelective(tbGoods);
+			//判断是上架还是下架,发送对应的消息到消息中间件
+			if("1".equals(marketableStatus)){
+				//上架.将goodsId放入到updateTopic
+				jmsTemplate.send(updateTopic, new MessageCreator() {
+					@Override
+					public Message createMessage(Session session) throws JMSException {
+						return session.createTextMessage(String.valueOf(selectId));
+					}
+				});
+			}else {
+				//下架,将goodsid放入deletetopic
+				jmsTemplate.send(deleteTopic, new MessageCreator() {
+					@Override
+					public Message createMessage(Session session) throws JMSException {
+						return session.createTextMessage(String.valueOf(selectId));
+					}
+				});
+
+			}
 		}
     }
 
